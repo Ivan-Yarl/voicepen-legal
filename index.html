@@ -1,14 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notion OAuth Integration</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .auth-button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background-color: #333;
+        }
+
+        #status {
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Notion OAuth Integration</h1>
-        <p>This page handles Notion OAuth integration for our AI assistant.</p>
-    </div>
+    <h1>Notion OAuth Integration</h1>
+    <p>This page handles Notion OAuth integration for our AI assistant.</p>
+    <button id="authorizeBtn" class="auth-button">Authorize with Notion</button>
+    <div id="status"></div>
+
+    <script src="assets/js/config.js"></script>
+    <script>
+        document.getElementById('authorizeBtn').addEventListener('click', function() {
+            const authUrl = `${config.notionAuthUrl}?client_id=${config.clientId}&response_type=code&owner=user&redirect_uri=${encodeURIComponent(config.redirectUri)}`;
+            window.location.href = authUrl;
+        });
+    </script>
 </body>
 </html>
