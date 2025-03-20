@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Auth Callback</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    <div class="callback-container">
+        <div id="loading">Выполняется авторизация...</div>
+        <div id="success" style="display:none">
+            <h2>Авторизация успешна!</h2>
+            <p>Можете закрыть это окно</p>
+        </div>
+        <div id="error" style="display:none">
+            <h2>Ошибка авторизации</h2>
+            <p id="error-message"></p>
+        </div>
+    </div>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/auth.js"></script>
+</body>
+</html>
