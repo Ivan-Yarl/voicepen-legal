@@ -1,39 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Получаем код из URL
+    // Обработка callback от Notion
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const error = urlParams.get('error');
+    const statusDiv = document.getElementById('status');
 
     if (error) {
-        showError('Произошла ошибка при авторизации: ' + error);
+        statusDiv.innerHTML = `Error: ${error}`;
         return;
     }
 
-    if (!code) {
-        showError('Код авторизации не получен');
-        return;
+    if (code) {
+        statusDiv.innerHTML = 'Получен код авторизации. Обмениваем на токен...';
+        
+        // Отправляем код на ваш бэкенд для обмена на токен
+        // Замените URL на адрес вашего бэкенда
+        fetch('YOUR_BACKEND_URL', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                code: code,
+                redirectUri: config.redirectUri
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.access_token) {
+                statusDiv.innerHTML = 'Успешная авторизация! Токен получен.';
+                // Здесь можно сохранить токен или выполнить другие действия
+            } else {
+                statusDiv.innerHTML = 'Ошибка при получении токена';
+            }
+        })
+        .catch(error => {
+            statusDiv.innerHTML = `Ошибка: ${error.message}`;
+        });
     }
-
-    // Здесь будет запрос на получение токена
-    // Важно: в реальном приложении этот запрос должен выполняться на бэкенде
-    // для безопасного хранения client_secret
-    exchangeCodeForToken(code);
 });
 
-function showError(message) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error').style.display = 'block';
-    document.getElementById('error-message').textContent = message;
-}
-
-function showSuccess() {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('success').style.display = 'block';
-}
-
-function exchangeCodeForToken(code) {
-    // В реальном приложении этот запрос должен быть на бэкенд
-    // Здесь только для демонстрации
-    console.log('Получен код авторизации:', code);
-    showSuccess();
+// Функция для инициации OAuth
+function startOAuth() {
+    const authUrl = `${config.notionAuthUrl}?client_id=${config.clientId}&redirect_uri=${encodeURIComponent(config.redirectUri)}&response_type=code`;
+    window.location.href = authUrl;
 }
